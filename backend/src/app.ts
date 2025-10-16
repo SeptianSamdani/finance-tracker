@@ -2,6 +2,7 @@ import express from 'express';
 import type { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
 const app: Application = express();
 
@@ -25,7 +26,9 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {
