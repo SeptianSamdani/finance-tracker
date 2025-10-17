@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -27,6 +28,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   
   const { login } = useAuth();
+  const navigate = useNavigate(); 
   const toast = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +44,7 @@ export default function Login() {
         duration: 3000,
         isClosable: true,
       });
-      window.location.href = '/dashboard';
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: 'Login failed',
