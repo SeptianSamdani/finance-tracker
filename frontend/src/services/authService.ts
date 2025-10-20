@@ -4,6 +4,7 @@ import type { LoginInput, RegisterInput, AuthResponse, User, ApiResponse } from 
 export const authService = {
   async login(data: LoginInput): Promise<AuthResponse> {
     const response = await api.post<ApiResponse<AuthResponse>>('/auth/login', data);
+
     if (response.data.data) {
       localStorage.setItem('token', response.data.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.data.user));
@@ -18,6 +19,7 @@ export const authService = {
       localStorage.setItem('user', JSON.stringify(response.data.data.user));
     }
     return response.data.data!;
+    
   },
 
   async getProfile(): Promise<User> {
