@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 import { Skeleton } from '../components/ui/skeleton';
 import { dashboardService } from '../services/dashboardService';
 import type { DashboardData } from '../types';
 import { formatCurrency } from '../utils/formatCurrency';
 import { formatDateShort } from '../utils/formatDate';
-import { TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -29,19 +28,19 @@ export default function Dashboard() {
     }
   };
 
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+  const COLORS = ['#171717', '#404040', '#737373', '#a3a3a3', '#d4d4d4', '#e5e5e5'];
 
   if (isLoading) {
     return (
       <Layout>
-        <div className="space-y-6">
-          <Skeleton className="h-12 w-64" />
+        <div className="space-y-8">
+          <Skeleton className="h-8 w-32" />
           <div className="grid gap-6 md:grid-cols-3">
-            <Skeleton className="h-32" />
-            <Skeleton className="h-32" />
-            <Skeleton className="h-32" />
+            <Skeleton className="h-28" />
+            <Skeleton className="h-28" />
+            <Skeleton className="h-28" />
           </div>
-          <Skeleton className="h-96" />
+          <Skeleton className="h-80" />
         </div>
       </Layout>
     );
@@ -49,61 +48,60 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Header */}
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Dashboard</h2>
-          <p className="text-slate-600 mt-1">Overview of your finances</p>
+          <h1 className="text-2xl font-semibold text-neutral-900">Dashboard</h1>
         </div>
 
         {/* Summary Cards */}
         <div className="grid gap-6 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">
-                Total Income
-              </CardTitle>
-              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-green-600" />
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-500">
+                  Income
+                </CardTitle>
+                <TrendingUp className="h-4 w-4 text-neutral-400" strokeWidth={1.5} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-3xl font-semibold text-neutral-900">
                 {formatCurrency(data?.summary.total_income || 0)}
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-neutral-400 mt-2">
                 {data?.summary.total_transactions || 0} transactions
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">
-                Total Expense
-              </CardTitle>
-              <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
-                <TrendingDown className="h-4 w-4 text-red-600" />
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-500">
+                  Expense
+                </CardTitle>
+                <TrendingDown className="h-4 w-4 text-neutral-400" strokeWidth={1.5} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-3xl font-semibold text-neutral-900">
                 {formatCurrency(data?.summary.total_expense || 0)}
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">
-                Balance
-              </CardTitle>
-              <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <Wallet className="h-4 w-4 text-blue-600" />
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-500">
+                  Balance
+                </CardTitle>
+                <Wallet className="h-4 w-4 text-neutral-400" strokeWidth={1.5} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className={`text-2xl font-bold ${(data?.summary.balance || 0) >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+              <div className={`text-3xl font-semibold ${(data?.summary.balance || 0) >= 0 ? 'text-neutral-900' : 'text-red-600'}`}>
                 {formatCurrency(data?.summary.balance || 0)}
               </div>
             </CardContent>
@@ -113,27 +111,62 @@ export default function Dashboard() {
         {/* Charts Row */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Monthly Trend Chart */}
-          <Card>
+          <Card className="border-neutral-200">
             <CardHeader>
-              <CardTitle>Monthly Trend</CardTitle>
-              <CardDescription>Income vs Expense over last 6 months</CardDescription>
+              <CardTitle className="text-base font-semibold text-neutral-900">Monthly Trend</CardTitle>
+              <CardDescription className="text-neutral-500">Last 6 months</CardDescription>
             </CardHeader>
             <CardContent>
               {data?.monthly_trend.length === 0 ? (
-                <p className="text-center text-slate-500 py-8">No data available</p>
+                <div className="h-[300px] flex items-center justify-center">
+                  <p className="text-sm text-neutral-400">No data available</p>
+                </div>
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={data?.monthly_trend}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
-                    <YAxis stroke="#64748b" fontSize={12} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" vertical={false} />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="#a3a3a3" 
+                      fontSize={11} 
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis 
+                      stroke="#a3a3a3" 
+                      fontSize={11}
+                      tickLine={false}
+                      axisLine={false}
+                    />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
+                      contentStyle={{ 
+                        backgroundColor: '#fff', 
+                        border: '1px solid #e5e5e5', 
+                        borderRadius: '8px',
+                        fontSize: '12px'
+                      }}
                       formatter={(value: number) => formatCurrency(value)}
                     />
-                    <Legend />
-                    <Line type="monotone" dataKey="income" stroke="#10b981" strokeWidth={2} name="Income" />
-                    <Line type="monotone" dataKey="expense" stroke="#ef4444" strokeWidth={2} name="Expense" />
+                    <Legend 
+                      wrapperStyle={{ fontSize: '12px' }}
+                      iconType="circle"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="income" 
+                      stroke="#171717" 
+                      strokeWidth={2} 
+                      name="Income"
+                      dot={false}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="expense" 
+                      stroke="#a3a3a3" 
+                      strokeWidth={2} 
+                      name="Expense"
+                      dot={false}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               )}
@@ -141,14 +174,16 @@ export default function Dashboard() {
           </Card>
 
           {/* Category Breakdown Pie Chart */}
-          <Card>
+          <Card className="border-neutral-200">
             <CardHeader>
-              <CardTitle>Spending by Category</CardTitle>
-              <CardDescription>Top categories by total amount</CardDescription>
+              <CardTitle className="text-base font-semibold text-neutral-900">Spending by Category</CardTitle>
+              <CardDescription className="text-neutral-500">Top 6 categories</CardDescription>
             </CardHeader>
             <CardContent>
               {data?.category_breakdown.length === 0 ? (
-                <p className="text-center text-slate-500 py-8">No data available</p>
+                <div className="h-[300px] flex items-center justify-center">
+                  <p className="text-sm text-neutral-400">No data available</p>
+                </div>
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
@@ -159,14 +194,24 @@ export default function Dashboard() {
                       labelLine={false}
                       label={(entry: any) => entry.name}
                       outerRadius={100}
-                      fill="#8884d8"
+                      fill="#171717"
                       dataKey="total_amount"
+                      stroke="#fff"
+                      strokeWidth={2}
                     >
                       {data?.category_breakdown.slice(0, 6).map((_, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Tooltip 
+                      formatter={(value: number) => formatCurrency(value)}
+                      contentStyle={{ 
+                        backgroundColor: '#fff', 
+                        border: '1px solid #e5e5e5', 
+                        borderRadius: '8px',
+                        fontSize: '12px'
+                      }}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               )}
@@ -175,43 +220,42 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Transactions */}
-        <Card>
+        <Card className="border-neutral-200">
           <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
-            <CardDescription>Your latest financial activities</CardDescription>
+            <CardTitle className="text-base font-semibold text-neutral-900">Recent Transactions</CardTitle>
           </CardHeader>
           <CardContent>
             {data?.recent_transactions.length === 0 ? (
-              <p className="text-center text-slate-500 py-8">No transactions yet</p>
+              <p className="text-center text-neutral-400 py-12 text-sm">No transactions yet</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-px">
                 {data?.recent_transactions.map((transaction) => (
                   <div
                     key={transaction.id}
-                    className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                    className="flex items-center justify-between p-4 hover:bg-neutral-50 transition-colors border-b border-neutral-100 last:border-0"
                   >
                     <div className="flex items-center gap-4">
                       <div
-                        className="h-12 w-12 rounded-lg flex items-center justify-center text-2xl"
-                        style={{ backgroundColor: transaction.category_color || '#cbd5e1' }}
+                        className="h-10 w-10 rounded-lg flex items-center justify-center text-xl"
+                        style={{ backgroundColor: transaction.category_color || '#e5e5e5' }}
                       >
                         {transaction.category_icon || '📝'}
                       </div>
                       <div>
-                        <p className="font-semibold text-slate-900">
+                        <p className="font-medium text-neutral-900 text-sm">
                           {transaction.category_name || 'Uncategorized'}
                         </p>
-                        <p className="text-sm text-slate-500">
+                        <p className="text-xs text-neutral-400">
                           {transaction.description || 'No description'}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`font-bold text-lg ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                      <p className="font-semibold text-neutral-900">
                         {transaction.type === 'income' ? '+' : '-'}
                         {formatCurrency(transaction.amount)}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-neutral-400">
                         {formatDateShort(transaction.transaction_date)}
                       </p>
                     </div>
